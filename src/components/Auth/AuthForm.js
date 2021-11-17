@@ -2,6 +2,14 @@ import { useState } from 'react';
 
 import classes from './AuthForm.module.css';
 
+// ============================== Notes ==============================
+//  firebase rest api - https://firebase.google.com/docs/reference/rest/auth
+//  firebase signup with email and password  - https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
+//  firebase authenticaton end point 
+//    https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]
+//    [API_KEY] should be replace with an apikey
+// ===================================================================
+
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
 
