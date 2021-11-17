@@ -1,13 +1,15 @@
-import { useState, useRef } from 'react';
-
+import { useState, useRef, useContext } from 'react';
+import AuthContext from '../../store/auth-context';
 import classes from './AuthForm.module.css';
 
 // ============================== Notes ==============================
 //  firebase rest api - https://firebase.google.com/docs/reference/rest/auth
 //  firebase signup with email and password  - https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
-//  firebase authenticaton end point 
+//  firebase authenticaton end point (sign up)
 //    https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]
 //    [API_KEY] should be replace with an apikey
+// firebase sign in
+//    https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[API_KEY]
 // ===================================================================
 
 const AuthForm = () => {
@@ -15,9 +17,14 @@ const AuthForm = () => {
   //storing inputs with useRef
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
+
+  const authCtx = useContext(AuthContext); 
+  //apikey, use helper const or do inline with fetch
   const fireBaseKey = 'AIzaSyDXQZiKmN9NITd8O6cnXccudiKDrftom4k';
   
+  //login state
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsloading ] = useState(false);
 
   //switch state 
   const switchAuthModeHandler = () => {
@@ -72,6 +79,7 @@ const AuthForm = () => {
       })
       .then((data) => {
         console.log(data);
+        authCtx.login(data.idToken);
       })
       .catch((err) => {
         alert(err.message);
@@ -91,7 +99,8 @@ const AuthForm = () => {
           <input type='password' id='password' required ref={passwordInputRef}/>
         </div>
         <div className={classes.actions}>
-          <button>{isLogin ? 'Login' : 'Create Account'}</button>
+          {isLoading && <button>Sending Request...</button>}
+          {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
           <button
             type='button'
             className={classes.toggle}
