@@ -5,6 +5,10 @@ import React, { useState }from 'react';
 //  it will read the current context value from the closest matching Provider ( AuthContextProvider ) above it in the tree.
 // Context.Provider - will provide our context to components that need it ( props.children allows us to wrap Provider around consuming components)
 // AuthContextProvider - a component used overall as a wrapper to provide access to its context
+
+// localStorage() - read-only property of the window interface allows you to access a Storage object
+// setItem() - allows us to store a key value pair to the given storage object
+// we can then store a token inside out localstorage and have our state check inside of local storage first before setting a new token
 // ===================================================================
 
 //initial state
@@ -23,16 +27,19 @@ const AuthContext = React.createContext({
 //manage state
 export const AuthContextProvider = (props) => {
   //states
-  const [token, setToken] = useState(null);
+  const initialToken = localStorage.getItem('token');
+  const [token, setToken] = useState(initialToken);
   const userIsLoggedIn = !!token; // this simply converts this truthy or falsy value to a true or false Boolean value.
 
 // functions/actions for changing context state
   const loginHandler = (token) => {
     setToken(token);
-  }
+    localStorage.setItem('token', token);
+  };
 
   const logOutHandler = () => {
     setToken(null);
+    localStorage.removeItem('token');
   };
 
   const contextValue = {
