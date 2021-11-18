@@ -1,4 +1,5 @@
 import { useState, useRef, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
 import classes from './AuthForm.module.css';
 
@@ -17,7 +18,7 @@ const AuthForm = () => {
   //storing inputs with useRef
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
-
+  const history = useHistory();
   const authCtx = useContext(AuthContext); 
   //apikey, use helper const or do inline with fetch
   const fireBaseKey = 'AIzaSyDXQZiKmN9NITd8O6cnXccudiKDrftom4k';
@@ -79,7 +80,11 @@ const AuthForm = () => {
       })
       .then((data) => {
         console.log(data);
-        authCtx.login(data.idToken);
+        const expirationTime = new Date(
+          new Date().getTime() + +data.expiresIn * 1000
+        );
+        authCtx.login(data.idToken, expirationTime); //token comes from here
+        history.replace('/profile');
       })
       .catch((err) => {
         alert(err.message);
