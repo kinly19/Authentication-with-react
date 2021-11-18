@@ -6,6 +6,11 @@ import AuthPage from './pages/AuthPage';
 import HomePage from './pages/HomePage';
 import AuthContext from './store/auth-context';
 
+// ============================== Notes ==============================
+// using isLoggedIn state coming from AuthContext (React Context),
+//  we can shield/protect routes from being accessed from unauthorised users
+// ===================================================================
+
 function App() {
 
   const authCtx = useContext(AuthContext);
